@@ -1,63 +1,56 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
-	kotlin("jvm") version "1.9.25"
-	kotlin("plugin.spring") version "1.9.25"
-	id("org.springframework.boot") version "3.4.3"
-	id("io.spring.dependency-management") version "1.1.7"
-	kotlin("plugin.jpa") version "1.9.25"
+	kotlin("jvm") version "1.8.21"
+	kotlin("plugin.spring") version "1.8.21"
+	id("org.springframework.boot") version "3.3.2"
+	id("io.spring.dependency-management") version "1.1.6"
 }
 
+// 현재 코틀린은 17까지 지원함
 group = "kuku"
-version = "0.0.1-SNAPSHOT"
-
-// 모든 프로젝트에서 적용
-allprojects {
-
-	repositories {
-		mavenCentral()
-	}
-
-	tasks.withType<JavaCompile> {
-		sourceCompatibility = "21"
-		targetCompatibility = "21"
-	}
-
-//	plugins.withType<JavaPlugin> {
-//		extensions.configure<JavaPluginExtension> {
-//			toolchain {
-//				languageVersion.set(JavaLanguageVersion.of(21))
-//			}
-//		}
-//	}
-
-	dependencies {
-		implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-		implementation("org.springframework.boot:spring-boot-starter-web")
-		implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-		implementation("org.jetbrains.kotlin:kotlin-reflect")
-		implementation("org.springframework.kafka:spring-kafka")
-		compileOnly("org.projectlombok:lombok")
-		runtimeOnly("com.mysql:mysql-connector-j")
-		annotationProcessor("org.projectlombok:lombok")
-		testImplementation("org.springframework.boot:spring-boot-starter-test")
-		testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-		testImplementation("org.springframework.kafka:spring-kafka-test")
-		testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-	}
-
-	kotlin {
-		compilerOptions {
-			freeCompilerArgs.addAll("-Xjsr305=strict")
-		}
-	}
-
-	allOpen {
-		annotation("jakarta.persistence.Entity")
-		annotation("jakarta.persistence.MappedSuperclass")
-		annotation("jakarta.persistence.Embeddable")
-	}
-
-	tasks.withType<Test> {
-		useJUnitPlatform()
-	}
+version = "1"
+java {
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
 }
 
+repositories {
+	mavenCentral()
+}
+
+allOpen {
+	annotation("jakarta.persistence.Entity")
+	annotation("jakarta.persistence.MappedSuperclass")
+	annotation("jakarta.persistence.Embeddable")
+}
+
+dependencies {
+	implementation("org.springframework.boot:spring-boot-starter")
+
+	// 로깅 관련 의존성
+	implementation("ch.qos.logback:logback-classic")
+
+	// Kotlin 관련 의존성
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+	// lombok (Kotlin에서는 덜 사용되지만, Java 코드와의 혼용을 위해 남김)
+	compileOnly("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok")
+	testCompileOnly("org.projectlombok:lombok")
+	testAnnotationProcessor("org.projectlombok:lombok")
+
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.withType<Test> {
+	useJUnitPlatform()
+}
+
+tasks.withType<KotlinCompile> {
+	kotlinOptions {
+		jvmTarget = "17"
+	}
+}
