@@ -1,8 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	kotlin("jvm") version "1.8.21"
+	kotlin("jvm") version "1.9.25"
 	kotlin("plugin.spring") version "1.8.21"
+	id("org.jetbrains.kotlin.plugin.allopen") version "1.8.21"
 	id("org.springframework.boot") version "3.3.2"
 	id("io.spring.dependency-management") version "1.1.6"
 }
@@ -13,6 +14,9 @@ version = "1"
 java {
 	sourceCompatibility = JavaVersion.VERSION_17
 	targetCompatibility = JavaVersion.VERSION_17
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
 }
 
 repositories {
@@ -41,6 +45,8 @@ dependencies {
 	testCompileOnly("org.projectlombok:lombok")
 	testAnnotationProcessor("org.projectlombok:lombok")
 
+	runtimeOnly ("com.mysql:mysql-connector-j")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
@@ -49,8 +55,9 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
-tasks.withType<KotlinCompile> {
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>  {
 	kotlinOptions {
 		jvmTarget = "17"
 	}
 }
+

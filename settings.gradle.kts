@@ -1,7 +1,7 @@
 rootProject.name = "board"
 
-//include("common")
-//include ("common:snowflake")
+include("common")
+include ("common:snowflake")
 //include ("common:data-serializr")
 //include ("common:event")
 //include ("common:outbox-messag-relay")
