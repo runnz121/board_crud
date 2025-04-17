@@ -47,4 +47,30 @@ open class Article(
         createdAt = LocalDateTime.now(),
         modifiedAt = LocalDateTime.now()
     )
+
+    companion object {
+        fun create(
+            articleId: Long,
+            title: String,
+            content: String,
+            boardId: Long,
+            writerId: Long
+        ) = Article().apply {
+            this.articleId = articleId
+            this.title = title
+            this.content = content
+            this.boardId = boardId
+            this.writerId = writerId
+            this.createdAt = LocalDateTime.now()
+            this.modifiedAt = createdAt
+        }
+    }
+
+    fun update(title: String,
+               content: String) {
+
+        this.title = title
+        this.content = content
+        modifiedAt = LocalDateTime.now()
+    }
 }
